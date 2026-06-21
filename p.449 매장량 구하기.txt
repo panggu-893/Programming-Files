@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main(void)
+{
+	srand((unsigned)time(NULL));
+	int area[6][6];
+
+	for (int i = 0;i < 6;i++)
+	{
+		for (int j = 0;j < 6;j++)
+			area[i][j] = rand() % 6;
+	}
+
+	for (int i = 0;i < 6;i++)
+	{
+		for (int j = 0;j < 6;j++)
+			printf("%d ", area[i][j]);
+		printf("\n");
+	}
+	
+	int sum_index[16] = { 0 };
+	int sum;
+	int size = 0;
+	for (int i = 0;i < 4;i++)
+	{
+		for (int j = 0;j < 4;j++)
+		{
+			sum = 0;
+			for (int k = i;k < i + 3;k++)
+			{
+				for (int l = j;l < j + 3;l++)
+				{
+					sum += area[k][l];
+				}
+			}
+			sum_index[size++] = sum;
+		}
+	}
+
+	int max = 0;
+	int row,column;
+	for (int i = 0;i < 16;i++)
+	{
+		if (sum_index[i] > max)
+		{
+			max = sum_index[i];
+			column = i % 4;
+			row = i / 4;
+		}
+	}
+
+	printf("\n가장 매장량이 많은 구역의 매장량은 %d입니다.\n시작점은 %d행 %d열 입니다.", max,row,column);
+
+	return 0;
+}

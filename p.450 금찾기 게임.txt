@@ -1,0 +1,152 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <conio.h>
+
+int main(void)
+{
+	srand((unsigned)time(NULL));
+
+	int tile[10][20] = { 0 }; 
+	int user_row, user_column, monster1_row, monster1_column, monster2_row, monster2_column, gold_row, gold_column;
+	int life, m_move_prob, user_move;
+	life = 1;
+
+	user_row = user_column = 1;
+	monster1_row = 5;
+	monster1_column = 6;
+	monster2_row = 6;
+	monster2_column = 7;
+	gold_row = 9;
+	gold_column = 10;
+
+	tile[user_row][user_column] = 1;
+	tile[gold_row][gold_column] = 100;
+	tile[monster1_row][monster1_column] = -1;
+	tile[monster2_row][monster2_column] = -1;
+	
+	for (int i = 0;i < 10;i++)									//처음 각 요소들의 위치 표시
+	{
+		for (int j = 0;j < 20;j++)
+		{
+			if (tile[i][j] == 1)
+				printf("#");
+			else if (tile[i][j] == 100)
+				printf("G");
+			else if (tile[i][j] == -1)
+				printf("M");
+			else
+				printf(".");
+		}
+		printf("\n");
+	}
+	
+	while (life)
+	{
+
+		for (int i = 0;i < 10;i++)
+		{
+			for (int j = 0;j < 20;j++)
+				tile[i][j] = 0;
+		}
+
+		user_move = _getch();							//유저의 입력 받기
+		switch (user_move)
+		{
+		case 'a':
+			user_column--;
+			break;
+		case 's':
+			user_row++;
+			break;
+		case 'd':
+			user_column++;
+			break;
+		case 'w':
+			user_row--;
+			break;
+		default:
+			break;
+		}
+
+		m_move_prob = rand() % 5;							//몬스터1의 움직임 랜덤으로 설정
+		switch (m_move_prob)
+		{
+		case 0:
+			monster1_row--;
+			break;
+		case 1:
+			monster1_column++;
+			break;
+		case 2:
+			monster1_row++;
+			break;
+		case 3:
+			monster1_column--;
+			break;
+		case 4:
+			break;
+		}
+
+		m_move_prob = rand() % 5;							//몬스터2의 움직임 랜덤으로 설정
+		switch (m_move_prob)
+		{
+		case 0:
+			monster2_row--;
+			break;
+		case 1:
+			monster2_column++;
+			break;
+		case 2:
+			monster2_row++;
+			break;
+		case 3:
+			monster2_column--;
+			break;
+		case 4:
+			break;
+		}
+
+		tile[user_row][user_column] = 1;
+		tile[gold_row][gold_column] = 100;				//각각의 요소들의 위치를 반복문이 돌 때마다 초기화하기 위해 배열 내부에 값 할당
+		tile[monster1_row][monster1_column] = -1;
+		tile[monster2_row][monster2_column] = -1;
+
+		system("cls");									// 결과를 최신화하기 위해 화면 클리어
+
+		for (int i = 0;i < 10;i++)						// 화면 출력
+		{
+			for (int j = 0;j < 20;j++)
+			{
+				if (tile[i][j] == 1)
+					printf("#");
+				else if (tile[i][j] == 100)
+					printf("G");
+				else if (tile[i][j] == -1)
+					printf("M");
+				else
+					printf(".");
+			}
+			printf("\n");
+		}
+
+		if (user_row == gold_row && user_column == gold_column)   //유저가 골드를 먹으면 게임 클리어
+		{
+			printf("Game Clear!");
+			break;
+		}
+
+		if (user_row == monster1_row && user_column == monster1_column)
+		{
+			printf("Game Over!");
+			break;
+		}
+
+
+		if (user_row == monster2_row && user_column == monster2_column)
+		{
+			printf("Game Over!");
+			break;
+		}
+	}
+}
