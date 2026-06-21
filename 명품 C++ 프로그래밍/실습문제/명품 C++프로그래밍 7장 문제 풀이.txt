@@ -1,0 +1,481 @@
+<1번>
+
+(1)
+#include <iostream>
+using namespace std;
+
+class Coffee {
+	int water, espresso, sugar, cream;
+public:
+	Coffee(int water = 1, int coffee = 1, int sugar = 0, int cream = 0)
+	{
+		this->water = water; this->espresso = coffee;
+		this->sugar = sugar; this->cream = cream;
+	}
+	void show()
+	{
+		cout << "물 " << water << ", 커피 " << espresso;
+		cout << ", 설탕 " << sugar << ", 크림 " << cream << endl;
+	}
+	Coffee& operator + (Coffee& adder);
+	Coffee operator + (int espresso);
+};
+
+Coffee& Coffee::operator+(Coffee& adder)
+{
+	this->water += adder.water;
+	this->espresso += adder.espresso;
+	this->sugar += adder.sugar;
+	this->cream += adder.cream;
+
+	return *this;
+}
+
+Coffee Coffee::operator+(int espresso)
+{
+	Coffee temp;
+	temp = *this;
+	temp.espresso += espresso;
+	
+	return temp;
+}
+
+int main()
+{
+	Coffee black(2, 5, 0, 0), dabang(2, 2, 2, 2), c, d;
+	c = black + dabang;
+	d = c + 1;
+	c.show();
+	d.show();
+}
+
+(2)번
+#include <iostream>
+using namespace std;
+
+class Coffee {
+	int water, espresso, sugar, cream;
+public:
+	Coffee(int water = 1, int coffee = 1, int sugar = 0, int cream = 0)
+	{
+		this->water = water; this->espresso = coffee;
+		this->sugar = sugar; this->cream = cream;
+	}
+	void show()
+	{
+		cout << "물 " << water << ", 커피 " << espresso;
+		cout << ", 설탕 " << sugar << ", 크림 " << cream << endl;
+	}
+	friend Coffee& operator + (Coffee& orin, Coffee& adder);
+	friend Coffee operator + (Coffee&orin, int espresso);
+};
+
+Coffee& operator+(Coffee& orin, Coffee& adder)
+{
+	orin.water += adder.water;
+	orin.espresso += adder.espresso;
+	orin.sugar += adder.sugar;
+	orin.cream += adder.cream;
+
+	return orin;
+}
+
+Coffee operator+(Coffee& orin, int espresso)
+{
+	Coffee temp;
+	temp = orin;
+	temp.espresso += espresso;
+	
+	return temp;
+}
+
+int main()
+{
+	Coffee black(2, 5, 0, 0), dabang(2, 2, 2, 2), c, d;
+	c = black + dabang;
+	d = c + 1;
+	c.show();
+	d.show();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<2번>
+
+(1)
+#include <iostream>
+using namespace std;
+
+class Coffee {
+	int water, espresso, sugar, cream;
+public:
+	Coffee(int water = 1, int coffee = 1, int sugar = 0, int cream = 0)
+	{
+		this->water = water; this->espresso = coffee;
+		this->sugar = sugar; this->cream = cream;
+	}
+	void show()
+	{
+		cout << "물 " << water << ", 커피 " << espresso;
+		cout << ", 설탕 " << sugar << ", 크림 " << cream << endl;
+	}
+	Coffee operator+=(Coffee& cof);
+	Coffee& operator+=(int n);
+	Coffee operator++(int n);
+};
+
+Coffee Coffee::operator += (Coffee& cof)
+{
+	this->water += cof.water;
+	this->espresso += cof.espresso;
+	this->sugar += cof.sugar;
+	this->cream += cof.cream;
+
+	return *this;
+}
+
+Coffee& Coffee::operator+=(int n)
+{
+	this->espresso++;
+
+	return *this;
+}
+
+Coffee Coffee::operator++(int n)
+{
+	this->espresso++;
+	return *this;
+}
+
+int main()
+{
+	Coffee black(2, 5, 0, 0), dabang(2, 2, 2, 2);
+	black += dabang;
+	black += 1;
+	black++;
+	black.show();
+}
+
+(2)
+#include <iostream>
+using namespace std;
+
+class Coffee {
+	int water, espresso, sugar, cream;
+public:
+	Coffee(int water = 1, int coffee = 1, int sugar = 0, int cream = 0)
+	{
+		this->water = water; this->espresso = coffee;
+		this->sugar = sugar; this->cream = cream;
+	}
+	void show()
+	{
+		cout << "물 " << water << ", 커피 " << espresso;
+		cout << ", 설탕 " << sugar << ", 크림 " << cream << endl;
+	}
+	friend Coffee operator+=(Coffee& orin, Coffee&adder);
+	friend Coffee& operator+=(Coffee& cof, int n);
+	friend Coffee operator++(Coffee& cof, int n);
+};
+
+Coffee operator += (Coffee& orin, Coffee& adder)
+{
+	orin.water += adder.water;
+	orin.espresso += adder.espresso;
+	orin.sugar += adder.sugar;
+	orin.cream += adder.cream;
+
+	return orin;
+}
+
+Coffee& operator+=(Coffee& cof, int n)
+{
+	cof.espresso += n;
+
+	return cof;
+}
+
+Coffee operator++(Coffee& cof, int n)
+{
+	cof.espresso++;
+	return cof;
+}
+
+int main()
+{
+	Coffee black(2, 5, 0, 0), dabang(2, 2, 2, 2);
+	black += dabang;
+	black += 1;
+	black++;
+	black.show();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<3번>
+
+(1)
+#include <iostream>
+using namespace std;
+
+class Coffee {
+	int water, espresso, sugar, cream;
+public:
+	Coffee(int water = 1, int coffee = 1, int sugar = 0, int cream = 0)
+	{
+		this->water = water; this->espresso = coffee;
+		this->sugar = sugar; this->cream = cream;
+	}
+	void show()
+	{
+		cout << "물 " << water << ", 커피 " << espresso;
+		cout << ", 설탕 " << sugar << ", 크림 " << cream << endl;
+	}
+	bool operator !() { if (this->sugar == 0) return true; else return false; }
+	bool operator >(Coffee& cof) { if ((water+espresso+sugar+cream) > (cof.water + cof.espresso + cof.sugar + cof.cream)) return true; else return false; }
+};
+
+int main()
+{
+	Coffee a(2, 5, 0, 0), b(2, 2, 2, 2);
+	if (!a) cout << "No Sugar!" << endl;
+	if (a > b)cout << "커피 a가 양이 더 많아요." << endl;
+	else cout << "커피 b가 양이 더 많아요." << endl;
+}
+
+(2)
+#include <iostream>
+using namespace std;
+
+class Coffee {
+	int water, espresso, sugar, cream;
+public:
+	Coffee(int water = 1, int coffee = 1, int sugar = 0, int cream = 0)
+	{
+		this->water = water; this->espresso = coffee;
+		this->sugar = sugar; this->cream = cream;
+	}
+	void show()
+	{
+		cout << "물 " << water << ", 커피 " << espresso;
+		cout << ", 설탕 " << sugar << ", 크림 " << cream << endl;
+	}
+	friend bool operator !(Coffee& cof);
+	friend bool operator >(Coffee& orin, Coffee& cof);
+};
+
+bool operator !(Coffee& cof) 
+{ 
+	if (cof.sugar == 0) 
+		return true; 
+	else return false; 
+}
+bool operator >(Coffee& orin, Coffee& cof) 
+{
+	if ((orin.water + orin.espresso + orin.sugar + orin.cream) > (cof.water + cof.espresso + cof.sugar + cof.cream)) 
+		return true; 
+	else return false; 
+}
+
+
+int main()
+{
+	Coffee a(2, 5, 0, 0), b(2, 2, 2, 2);
+	if (!a) cout << "No Sugar!" << endl;
+	if (a > b)cout << "커피 a가 양이 더 많아요." << endl;
+	else cout << "커피 b가 양이 더 많아요." << endl;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<4번>
+
+(1)
+#include <iostream>
+using namespace std;
+
+class Coffee {
+	int water, espresso, sugar, cream;
+public:
+	Coffee(int water = 1, int coffee = 1, int sugar = 0, int cream = 0)
+	{
+		this->water = water; this->espresso = coffee;
+		this->sugar = sugar; this->cream = cream;
+	}
+	void show()
+	{
+		cout << "물 " << water << ", 커피 " << espresso;
+		cout << ", 설탕 " << sugar << ", 크림 " << cream << endl;
+	}
+	Coffee& operator << (Coffee& cof) { this->water += cof.water;this->espresso += cof.espresso;this->sugar += cof.sugar;this->cream += cof.cream; return *this; }
+	Coffee& operator << (int n) { this->water += n; return *this; }
+};
+
+
+
+int main()
+{
+	Coffee a(2, 5, 0, 0), b(2, 2, 2, 2);
+	a << b << 3;
+	a.show();
+}
+
+(2)
+#include <iostream>
+using namespace std;
+
+class Coffee {
+	int water, espresso, sugar, cream;
+public:
+	Coffee(int water = 1, int coffee = 1, int sugar = 0, int cream = 0)
+	{
+		this->water = water; this->espresso = coffee;
+		this->sugar = sugar; this->cream = cream;
+	}
+	void show()
+	{
+		cout << "물 " << water << ", 커피 " << espresso;
+		cout << ", 설탕 " << sugar << ", 크림 " << cream << endl;
+	}
+
+	friend Coffee& operator << (Coffee& orin, Coffee& cof);
+	friend Coffee& operator << (Coffee& cof, int n);
+};
+
+Coffee& operator << (Coffee& orin, Coffee& cof) 
+{
+	orin.water += cof.water;
+	orin.espresso += cof.espresso;
+	orin.sugar += cof.sugar;
+	orin.cream += cof.cream; 
+	return orin; 
+}
+
+Coffee& operator << (Coffee& cof, int n)
+{
+	cof.water += n;
+
+	return cof;
+}
+
+
+int main()
+{
+	Coffee a(2, 5, 0, 0), b(2, 2, 2, 2);
+	a << b << 3;
+	a.show();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<5번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Wallet
+{
+	string name;
+	int balance;
+public:
+	Wallet(string name = "", int balance = 0) { this->name = name;this->balance = balance;}
+	void show() { cout << name << " 지갑에 " << balance << "원 있어요." << endl; }
+	Wallet operator += (int balance) { this->balance += balance; return *this; }
+	Wallet operator -= (int balance) { this->balance -= balance; return *this; }
+	Wallet& operator +(Wallet& w) { this->balance += w.balance; return *this; }
+	Wallet& operator +(int n) { this->balance += n; return *this; }
+	Wallet& operator = (Wallet& w) { this->balance = w.balance; return *this; }
+	friend Wallet& operator + (int n, Wallet& w);
+};
+
+Wallet& operator + (int n, Wallet& w)
+{
+	w.balance += n;
+	
+	return w;
+}
+
+
+int main()
+{
+	Wallet a("옥지윤", 2000), b("성주연", 100), c("박채원");
+	
+	a += 1000;
+	a.show();
+
+	a -= 500;
+	a.show();
+
+	b = a + b + 100;
+	b.show();
+
+	c = 500 + b;
+	c.show();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<6번>
+
+#include <iostream>
+using namespace std;
+
+class Light {
+	int size;
+public:
+	Light(int size = 1) { this->size = size; }
+	Light& operator += (Light& l) { this->size += l.size; l.size = 0; return *this; }
+	Light& operator += (int n) { this->size += n; return *this; }
+	void operator ~() { cout << "빛 크기 " << size << endl; }
+	Light& operator = (const Light& l) { this->size = l.size; return *this; }
+	Light operator --(int n) { Light temp; temp = *this; this->size--; return temp; }
+	bool operator ==(int n) { if (this->size == n) return true; else return false; }
+};
+
+
+
+int main()
+{
+	Light a(10), b(20), c, d(0);
+	(a += b) += 10;
+	~a;~b;~c;
+	d = c--;
+	~d;
+	if (c == 0) cout << "빛 c는 꺼져 있습니다." << endl;
+	if (d == 0) cout << "빛 d는 꺼져 있습니다." << endl;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<7번>
+
+#include <iostream>
+using namespace std;
+
+class Matrix {
+	int a1, a2, a3, a4;
+public:
+	Matrix(int a1 = 0, int a2 = 0, int a3 = 0, int a4 = 0) { this->a1 = a1;this->a2 = a2;this->a3 = a3;this->a4 = a4; }
+	void show() { cout << "Matrix = { " << a1 << ' ' << a2 << ' ' << a3 << ' ' << a4 << " }" << endl; }
+	Matrix operator + (Matrix& m) { Matrix temp; temp = *this; temp.a1 += m.a1; temp.a2 += m.a2; temp.a3 += m.a3; temp.a4 += m.a4; return temp; }
+	Matrix& operator = (const Matrix& m) { this->a1 = m.a1;this->a2 = m.a2;this->a3 = m.a3;this->a4 = m.a4; return *this; }
+	Matrix& operator += (Matrix& m) { this->a1 += m.a1;this->a2 += m.a2;this->a3 += m.a3;this->a4 += m.a4; return *this; }
+	bool operator ==(Matrix& m) { if ((a1 == m.a1) && (a2 == m.a2) && (a3 == m.a3) && (a4 == m.a4)) return true; else return false; }
+};
+
+int main()
+{
+	Matrix a(1, 2, 3, 4), b(2, 3, 4, 5), c;
+	c = a + b;
+	a += b;
+	a.show();b.show();c.show();
+	if (a == c) cout << "a와 c는 같습니다." << endl;
+
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<8번>
+

@@ -1,0 +1,34 @@
+//바이너리 I/O 모드로 get()과 put()을 이용한 이미지 파일 복사
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main()
+{
+	const char* src = "C:\\Users\\SJH\\Downloads\\스크린샷 2026-03-02 195341.png";
+	const char* dest = "c:\\Users\\sjh\\downloads\\copy.jpg";
+	
+	ifstream fin;
+	fin.open(src,ios::binary);
+	if (!fin)
+	{
+		cout << "Failed to open file..." << endl;
+		return 0;
+	}
+	ofstream fout;
+	fout.open(dest,ios::binary);
+	if (!fout)
+	{
+		cout << "Failed to open file..." << endl;
+		return 0;
+	}
+	
+	int c;
+	while ((c = fin.get()) != EOF)
+	{
+		fout.put(c);
+	}
+	fin.close();
+	fout.close();
+}

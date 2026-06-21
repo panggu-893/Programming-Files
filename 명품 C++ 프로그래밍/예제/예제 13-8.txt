@@ -1,0 +1,45 @@
+//예외 클래스 만들기
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class MyException {
+	int lineNo;
+	string func, msg;
+public:
+	MyException(int n, string f, string m) :lineNo(n), func(f), msg(m) {}
+	void print() { cout << func << ":" << lineNo << ", " << msg << endl; }
+};
+
+class DividebyZeroException : public MyException {
+public:
+	DividebyZeroException(int n, string f, string m) : MyException(n, f, m) {}
+};
+
+class InvalidInputException : public MyException {
+public:
+	InvalidInputException(int n, string f, string m) : MyException(n, f, m) {}
+};
+
+int main()
+{
+	int x, y;
+	try {
+		cout << "나눗셈 시작. 두 개의 양의 정수 입력>> ";
+		cin >> x >> y;
+		if (x < 0 || y < 0)
+			throw InvalidInputException(32, "main()", "음수 입력 발생");
+		if (y == 0)
+			throw DividebyZeroException(34, "main()", "0으로 나누는 예외 발생");
+		cout << (double)x / (double)y << endl;
+	}
+	catch (InvalidInputException& e)
+	{
+		e.print();
+	}
+	catch (DividebyZeroException& e)
+	{
+		e.print();
+	}
+}

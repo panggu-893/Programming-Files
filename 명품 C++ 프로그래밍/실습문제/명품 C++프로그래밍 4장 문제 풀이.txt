@@ -1,0 +1,488 @@
+<9번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Book {
+	string title;
+	int price;
+public:
+	Book() { title = "", price = 0; }
+	void set(string title, int price) { this->title = title;this->price = price; }
+	string getTitle() { return title; }
+	int getPrice() { return price; }
+};
+
+class Library {
+	string name;
+	Book* p;
+	int size;
+	int next = 0;
+public:
+	Library(string name, int size) { this->name = name;this->size = size; p = new Book[size]; }
+	~Library() { delete[] p; }
+	void add(string name, int price);
+	void show();
+	Book* mostExpensive();
+};
+
+void Library::add(string name, int price)
+{
+	p[next].set(name, price);
+	next++;
+}
+
+void Library::show()
+{
+	cout << name << "에 입고된 책은 다음 " << next << "권 입니다." << endl;
+	for (int i = 0;i < next;i++)
+		cout << "[" << p[i].getTitle() << "]" << "   ";
+	cout << endl;
+}
+
+Book* Library::mostExpensive()
+{
+	int max = p[0].getPrice();
+	int max_index;
+	for (int i = 0;i < next;i++)
+	{
+		if (p[i].getPrice() > max)
+		{
+			max = p[i].getPrice();
+			max_index = i;
+		}
+	}
+
+	return (p + max_index);
+}
+
+
+
+int main()
+{
+	Library* lib = new Library("한국도서관", 10);
+	lib->add("명품 C++", 30000);
+	lib->add("라즈베리파이", 34000);
+	lib->add("HTML5", 33000);
+	lib->show();
+	Book* b = lib->mostExpensive();
+	cout << "가장 비싼 책: " << b->getTitle() << "," << b->getPrice() << endl;
+	delete lib;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<10번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Movie {
+	string title; int score;
+public:
+	Movie() { title = ""; score = 0; }
+	string getTitle() { return title; }
+	int getScore() { return score; }
+	void set(string title, int score) { this->title = title;this->score = score; }
+};
+
+class Recommender {
+	string name;
+	Movie* p;
+	int size;
+	int next = 0;
+public:
+	Recommender(string name, int size) { this->name = name;this->size = size; p = new Movie[size]; cout << name << " 객체가 생성됐습니다." << endl; }
+	~Recommender() { delete[]p; cout << name << " 객체가 소멸되었습니다." << endl; }
+	void read();
+	void list();
+	Movie recommend();
+};
+
+void Recommender::read()
+{
+	for (int i = 0;i < size;i++)
+	{
+		string name; int score;
+		cout << "영화" << i + 1<<">>";
+		getline(cin, name, ',');
+		cin >> score;
+		p[i].set(name, score);
+		cin.ignore(1);
+		next++;
+	}
+}
+
+void Recommender::list()
+{
+	for (int i = 0;i < next;i++)
+		cout << "[" << p[i].getTitle() << "," << p[i].getScore() << "] ";
+	cout << endl;
+}
+
+Movie Recommender::recommend()
+{
+	int max, max_index;
+	max = p[0].getScore();
+	for (int i = 1;i < next;i++)
+	{
+		if (p[i].getScore() > max)
+		{
+			max = p[i].getScore();
+			max_index = i;
+		}
+	}
+	
+	return p[max_index];
+}
+
+int main()
+{
+	Recommender* mr = new Recommender("베스트 영화 추천", 3);
+	mr->read();
+	mr->list();
+	Movie m = mr->recommend();
+	cout << "추천 영화: " << m.getTitle() << endl;
+	
+	delete mr;
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<11번>
+
+#include <iostream>
+using namespace std;
+
+class Container {
+	int size;
+public:
+	Container() { size = 10; }
+	void fill(int n);
+	bool consume(int n);
+	int getSize();
+};
+
+void Container::fill(int n)
+{
+	if (size + n > 10)
+		size = 10;
+	else
+		size += n;
+}
+
+bool Container::consume(int n)
+{
+	if (size - n < 0) return false;
+	else
+	{
+		size -= n;
+		return true;
+	}
+}
+
+int Container::getSize()
+{
+	return size;
+}
+
+
+
+class CoffeeVendingMachine {
+	Container tong[3];
+	void fill() { for (int i = 0;i < 3;i++) tong[i].fill(10); }
+	void getEspresso();
+	void getAmericano();
+	void getSugarCoffee();
+	void show();
+public:
+	void run();
+};
+
+void CoffeeVendingMachine::getEspresso()
+{
+	if (tong[0].consume(1) && tong[1].consume(1)) cout << "에스프레소 드세요~" << endl;
+	else cout << "원료가 부족합니다. 원료를 채워주세요." << endl;
+}
+
+void CoffeeVendingMachine::getAmericano()
+{
+	if (tong[0].consume(1) && tong[1].consume(2)) cout << "아메리카노 드세요~" << endl;
+	else cout << "원료가 부족합니다. 원료를 채워주세요." << endl;
+}
+
+void CoffeeVendingMachine::getSugarCoffee()
+{
+	if (tong[0].consume(1) && tong[1].consume(2) && tong[2].consume(1)) cout << "설탕커피 드세요~" << endl;
+	else cout << "원료가 부족합니다. 원료를 채워주세요." << endl;
+}
+
+void CoffeeVendingMachine::show() { cout << "커피: " << tong[0].getSize() << ", 물: " << tong[1].getSize() << ", 설탕: " << tong[2].getSize() << endl; }
+
+void CoffeeVendingMachine::run()
+{
+	cout << "***** 커피자판기를 작동합니다. *****" << endl;
+	while (1)
+	{
+		int n;
+		cout << "메뉴를 눌러주세요(1:에스프레소, 2:아메리카노, 3:설탕커피, 4:잔량보기, 5:채우기, 6:종료)>> ";
+		cin >> n;
+		if (n == 6)
+			break;
+		switch (n)
+		{
+		case 1:
+			getEspresso();
+			break;
+		case 2:
+			getAmericano();
+			break;
+		case 3:
+			getSugarCoffee();
+			break;
+		case 4:
+			show();
+			break;
+		case 5:
+			fill();
+			show();
+			break;
+		default:
+			cout << "잘못 입력하셨습니다. 메뉴 내에서 선택해주세요." << endl;\
+		}
+	}
+	cout << "***** 커피자판기를 종료합니다. *****" << endl;
+}
+
+int main()
+{
+	CoffeeVendingMachine Mega;
+	Mega.run();
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<12번>
+
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+class Player {
+	string name;
+	int sum, finger;
+public:
+	Player() { name = ""; sum = 0;finger = 0; }
+	void setName() { string name; cout << "선수 이름>> "; cin >> name; this->name = name; }
+	void setInput() { int sum, finger; cout << name << "님, 예상 합과 수 입력하세요>>";cin >> sum >> finger;this->sum = sum;this->finger = finger; }
+	int getSum() { return sum; }
+	int getFinger() { return finger; }
+	string getName() { return name; }
+};
+
+
+
+class ZeroGame {
+	Player* player;
+	int number, com_fig, turn;
+public:
+	ZeroGame(int n) { srand((unsigned)time(NULL)); number = n; player = new Player[number]; }
+	~ZeroGame() { delete[]player; }
+	void run();
+};
+
+void ZeroGame::run()
+{
+	turn = 0;
+	cout << number << "명이 Zero 게임을 시작합니다." << endl;
+	for (int i = 0;i < number;i++)
+		player[i].setName();
+	while (true)
+	{
+		turn %= number;
+		com_fig = rand() % 3;
+		player[turn].setInput();
+		cout << "예상 합: " << player[turn].getSum() << ", " << player[turn].getName() << ' ' << player[turn].getFinger() << ", 컴 " << com_fig;
+		if (player[turn].getSum() == player[turn].getFinger() + com_fig)
+		{
+			cout << ": 승리!" << endl;
+			break;
+		}
+		else
+			cout << ": 실패!" << endl;
+		turn++;
+	}
+}
+
+int main()
+{
+	ZeroGame game(2);
+	game.run();
+
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<13번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Histogram {
+	int index = 0;
+	int alpha[26] = { 0 };
+	string sent[10];
+	
+public:
+	Histogram(string sent="",char='\0');
+	void alpus(string sent);
+	void add(string sent);
+	void draw();
+};
+
+void Histogram::alpus(string sent)
+{
+	for (int i = 0;i < sent.length();i++)
+	{
+		if (isalpha(sent[i]))
+			alpha[tolower(sent[i]) - 'a']++;
+		else
+			continue;
+	}
+}
+
+Histogram::Histogram(string sent,char)
+{
+	if (sent == "")
+		return;
+	this->sent[index++] = sent;
+	alpus(sent);
+}
+
+void Histogram::add(string sent)
+{
+	this->sent[index++] = sent;
+	alpus(sent);
+}
+
+void Histogram::draw()
+{
+	for (int i = 0;i < index;i++)
+	{
+		int flag = 0;
+		for (int j = 0;j < sent[i].length();j++)
+		{
+			if (sent[i].find("\n") != string::npos)
+				flag = 1;
+			else
+				flag = 0;
+		}
+		if (flag)
+			cout << sent[i] << endl;
+		else
+			cout << sent[i];
+	}
+	int sum = 0;
+	for (int i = 0;i < 26;i++)
+		sum += alpha[i];
+	cout << "총 알파벳 수 " << sum << endl << endl;;
+	for (int i = 0;i < 26;i++)
+	{
+		cout << (char)(i + 'a') << "(" << alpha[i] << ")\t:";
+		for (int j = 0;j < alpha[i];j++)
+			cout << "*";
+		cout << endl;
+	}
+}
+
+int main()
+{
+	Histogram histo("You fill up my senses, like a night in a forest\n");
+	histo.add("Like the mountains in springtime, like a walk in the rain\n");
+	histo.add("-");
+	histo.add("Annie's Song by John Denver");
+	histo.draw();
+
+	return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<14번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Song {
+	string title;
+	string singer;
+public:
+	Song() {};
+	void setTitle(string title) { this->title = title;}
+	void setSinger(string singer) { this->singer = singer; }
+	string getTitle() { return title; }
+	string getSinger() { return singer; }
+};
+
+class Album {
+	int count,index;
+	Song* psong;
+public:
+	Album(int count) { index = 0; this->count = count; psong = new Song[count]; };
+	~Album() { delete[]psong; }
+	void setSong(string title, string singer) { psong[index].setTitle(title); psong[index++].setSinger(singer); }
+	string getSongSinger(string title) { for (int i = 0;i < count;i++) { if (psong[i].getTitle() == title) return psong[i].getSinger(); else continue; } return "nothing"; }
+};
+
+class AlbumManager {
+public:
+	void run();
+};
+
+void AlbumManager::run()
+{
+	cout << "장미 앨범에 곡을 저장합니다." << endl;
+	int count = 0, index=0;
+	cout << "곡 개수 입력>>";
+	cin >> count;
+	cin.ignore(1);
+	Album jm(count);
+	for (int i = 0;i < count;i++)   //곡 저장
+	{
+		string title, singer;
+		cout << "곡명? ";
+		getline(cin, title, '\n');
+		cout << "가수? ";
+		getline(cin, singer, '\n');
+		jm.setSong(title, singer);
+	}
+	cout << "장미 앨범에서 곡을 검색합니다." << endl;
+	while (true)    //곡 찾기
+	{
+		string title;
+		cout << "검색할 곡명 입력>>";
+		getline(cin, title, '\n');
+		if (title == "그만")
+			break;
+		string singer = jm.getSongSinger(title);
+		if (singer != "nothing") cout << "가수는  " << singer << "입니다." << endl;
+		else cout << title << "는 없는 곡입니다." << endl;
+	}
+}
+
+int main()
+{
+	AlbumManager Spotify;
+	Spotify.run();
+
+	return 0;
+}

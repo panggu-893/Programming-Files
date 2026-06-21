@@ -1,0 +1,768 @@
+<1번>
+
+#include <iostream>
+using namespace std;
+
+void twice(int& n)
+{
+	n *= 2;
+}
+
+int main()
+{
+	int n = 12;
+	twice(n);
+	cout << n;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<2번>
+
+#include <iostream>
+using namespace std;
+
+bool compare(int a, int b, int& min, int& max)
+{
+	if (a == b)
+		return true;
+	else
+	{
+		if (a > b)
+		{
+			max = a;
+			min = b;
+			return false;
+		}
+		else
+		{
+			max = b;
+			min = a;
+			return false;
+		}
+	}
+}
+
+int main()
+{
+	int a, b, min, max;
+	cout << "두 수 입력>> ";
+	cin >> a >> b;
+	bool res = compare(a, b, min, max);
+	if (res == true) cout << "두 수는 같습니다." << endl;
+	else cout << "작은 수는 " << min << ", 큰 수는 " << max << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<3번>
+
+#include <iostream>
+using namespace std;
+
+class Bubble {
+	int radius;
+public:
+	Bubble(int radius) { this->radius = radius;}
+	int getRadius() { return radius; }
+	void setRadius(int radius) { this->radius = radius; }
+};
+
+void addBubble(Bubble& a, Bubble& b, Bubble& c)
+{
+	int r_sum = 0;
+	r_sum += b.getRadius() + c.getRadius();
+	a.setRadius(a.getRadius()+r_sum);
+}
+
+int main()
+{
+	Bubble a(5), b(10), c(130);
+	addBubble(c, a, b);
+	cout << "버블 c의 반지름 " << c.getRadius() << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<4번>
+
+#include <iostream>
+using namespace std;
+
+class Bubble {
+	int radius;
+public:
+	Bubble(int radius) { this->radius = radius;}
+	int getRadius() { return radius; }
+	void setRadius(int radius) { this->radius = radius; }
+};
+
+
+
+bool combineBubble(Bubble& a, Bubble& b)
+{
+	if (a.getRadius() == b.getRadius())
+		return false;
+	else
+	{
+		if (a.getRadius() > b.getRadius())
+		{
+			a.setRadius(a.getRadius() + b.getRadius());
+			b.setRadius(0);
+			return true;
+		}
+		else
+		{
+			b.setRadius(b.getRadius() + a.getRadius());
+			a.setRadius(0);
+			return true;
+		}
+	}
+}
+
+
+
+int main()
+{
+	Bubble a(5), b(10);
+	if (combineBubble(a, b) == false)
+		cout << "두 버블의 크기가 같음" << endl;
+	else
+		cout << "큰 쪽으로 병합됨" << endl;
+	cout << "버블 a의 반지름 " << a.getRadius() << endl;
+	cout << "버블 b의 반지름 " << b.getRadius() << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<5번>
+
+#include <iostream>
+using namespace std;
+
+class Color {
+	int r, g, b;
+public:
+	Color(int r, int g, int b) { this->r = r;this->g = g;this->b = b; }
+	void getColor(int& r, int& g, int& b) { r = this->r;g = this->g;b = this->b; }
+};
+
+int main()
+{
+	Color fore(255, 0, 0), back(15, 128, 200);
+	int r, g, b;
+	fore.getColor(r, g, b);
+	cout << "red=" << r << ", green=" << g << ", blue=" << b << endl;
+	back.getColor(r, g, b);
+	cout << "red=" << r << ", green=" << g << ", blue=" << b << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<6번>
+
+#include <iostream>
+using namespace std;
+
+class Polygon {
+	int size = 0;
+	int* xList, * yList;
+public:
+	Polygon(int size) { this->size = size; xList = new int[size]; yList = new int[size]; }
+	~Polygon() { delete[]xList; delete[]yList; }
+	void read();
+	bool get(int n, int &x, int &y);
+};
+
+void Polygon::read()
+{
+	cout << "아래에 x,y 값으로 " << size << "개의 점을 입력하세요." << endl;
+	for (int i = 0;i < size;i++)
+		cin >> xList[i] >> yList[i];
+}
+
+bool Polygon::get(int n, int &x, int &y)
+{
+	if (n < size && n>1)
+	{
+		x = xList[n-1];
+		y = yList[n-1];
+		return true;
+	}
+	else
+		return false;
+}
+
+int main()
+{
+	Polygon poly(6);
+	poly.read();
+	int n = 3, x, y;
+	bool res = poly.get(n, x, y);
+	if (res == true)
+		cout << n << "번째 점은 (" << x << "," << y << ")" << endl;
+	else
+		cout << n << "번째 점은 없습니다." << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<7번>
+
+#include <iostream>
+using namespace std;
+
+class Power {
+	int kick, punch;
+public:
+	Power(int kick, int punch) { this->kick = kick;this->punch = punch; }
+	Power& add(Power p) { kick += p.kick;punch += p.punch;return *this; }
+	void show() { cout << "kick=" << kick << ", punch=" << punch << endl; }
+};
+
+int main()
+{
+	Power a(1, 2), b(10, 20), c(100, 200);
+	c.add(a).add(b).add(Power(1000, 2000));
+	c.show();
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<8번>
+
+#include <iostream>
+using namespace std;
+
+class Fitness {
+	int m, w;
+public:
+	Fitness() { m = w = 0; }
+	void count(string sex, int& var);
+	int& at(string sex);
+	Fitness& arrive(string sex, int count);
+};
+
+void Fitness::count(string sex, int& var)
+{
+	if (sex == "남") var = m;
+	if (sex == "여") var = w;
+}
+
+int& Fitness::at(string sex)
+{
+	if (sex == "남") return m;
+	if (sex == "여")return w;
+}
+
+Fitness& Fitness::arrive(string sex, int count)
+{
+	if (sex == "남")
+	{
+		m += count;
+		return *this;
+	}
+	if (sex == "여")
+	{
+		w += count;
+		return *this;
+	}
+}
+
+
+
+int main()
+{
+	Fitness altong;
+	altong.arrive("남", 3).arrive("여", 6).arrive("남", 9);
+
+	int m = 0, w = 0;
+	altong.count("남", m);
+	altong.count("여", w);
+	cout << "남자 회원 " << m << "명, 여자 회원 " << w << "명" << endl;
+
+	altong.at("남") = 100;
+	m = altong.at("남");
+	w = altong.at("여");
+	cout << "남자 회원 " << m << "명, 여자 회원 " << w << "명" << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<9번>
+
+#include <iostream>
+using namespace std;
+
+class MyStack {
+	int p[10] = { 0 };
+	int tos = 0;
+public:
+	MyStack() {};
+	bool push(int n);
+	bool pop(int& n);
+};
+
+bool MyStack::push(int n)
+{
+	if (tos < 10)
+	{
+		p[tos++] = n;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool MyStack::pop(int& n)
+{
+	if (tos > 0)
+	{
+		n = p[--tos];
+		p[tos] = 0;
+		return true;
+	}
+	else
+		return false;
+}
+
+
+
+int main()
+{
+	MyStack st;
+	for (int i = 0;i < 11;i++)
+	{
+		if (st.push(i)) cout << i << ' ';
+		else cout << endl << i + 1 << "번째 푸시 실패! 스택 차 있음" << endl;
+	}
+	int n;
+	for (int i = 0;i < 11;i++)
+	{
+		if (st.pop(n)) cout << n << ' ';
+		else cout << endl << i + 1 << "번째 팝 실패! 스택이 비어 있음" << endl;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<10번>
+
+#include <iostream>
+using namespace std;
+
+class MyPipe {
+	int putIndex = 0;
+	int p[5];
+public:
+	MyPipe() { for (int i = 0;i < 5;i++) p[i] = 0; };
+	bool put(int n);
+	bool get(int& n);
+	int getSize() { return putIndex; }
+};
+
+bool MyPipe::put(int n)
+{
+	if (putIndex < 5)
+	{
+		p[putIndex++] = n;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool MyPipe::get(int& n)
+{
+	if (putIndex > 0)
+	{
+		n = p[0];
+		for (int i = 0;i < putIndex-1;i++)  
+			p[i] = p[i + 1];
+		p[--putIndex] = 0;
+		return true;
+	}
+	else
+		return false;
+}
+
+
+
+int main()
+{
+	MyPipe pipe;
+	for (int i = 0;i < 6;i++)
+	{
+		if (pipe.put(i)) cout << i << ' ';
+		else cout << endl << i + 1 << "번째 put 실패! 파이프 꽉 참" << endl;
+	}
+
+	cout << "현재 파이프 크기: " << pipe.getSize() << endl;
+
+	int n;
+	for (int i = 0;i < 6;i++)
+	{
+		if (pipe.get(n)) cout << n << ' ';
+		else cout << endl << i + 1 << "번째 get 실패! 파이프 텅 빔" << endl;
+	}
+
+	cout << "현재 파이프 크기: " << pipe.getSize() << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<11번>
+
+#include<iostream>
+using namespace std;
+
+class MyStack {
+	int* p;
+	int size = 0;
+	int tos = 0;
+public:
+	MyStack(int size) { this->size = size; p = new int[size]; };
+	MyStack(const MyStack& src);
+	~MyStack() { delete[]p; }
+	bool push(int n);
+	bool pop(int& n);
+};
+
+MyStack::MyStack(const MyStack& src)
+{
+	this->size = src.size;
+	this->p = new int[size];
+	for (int i = 0;i < size;i++)
+		p[i] = src.p[i];
+}
+
+bool MyStack::push(int n)
+{
+	if (tos < size)
+	{
+		p[tos++] = n;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool MyStack::pop(int& n)
+{
+	if (tos > 0)
+	{
+		n = p[--tos];
+		p[tos] = 0;
+		return true;
+	}
+	else
+		return false;
+}
+
+int main()
+{
+	MyStack a(10);
+	a.push(10); a.push(20);
+	
+	MyStack b = a;
+	b.push(30);
+	int n;
+	a.pop(n);
+	cout << "스택 a에서 팝한 값 " << n << endl;
+	b.pop(n);
+	cout << "스택 b에서 팝한 값 " << n << endl;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<12번>
+
+#include <iostream>
+using namespace std;
+
+class MyPipe {
+	int size = 0;
+	int putIndex = 0;
+	int* p;
+public:
+	MyPipe(int size) { this->size = size;p = new int[size]; };
+	MyPipe(const MyPipe& src);
+	~MyPipe() { delete[]p; }
+	bool put(int n);
+	bool get(int& n);
+	int getSize() { return putIndex; }
+};
+
+MyPipe::MyPipe(const MyPipe& src)
+{
+	this->putIndex = src.putIndex;
+	this->size = src.size;
+	this->p = new int[size];
+	for (int i = 0;i < size;i++)
+		this->p[i] = src.p[i];
+}
+
+bool MyPipe::put(int n)
+{
+	if (putIndex < 5)
+	{
+		p[putIndex++] = n;
+		return true;
+	}
+	else
+		return false;
+}
+
+bool MyPipe::get(int& n)
+{
+	if (putIndex > 0)
+	{
+		n = p[0];
+		for (int i = 0;i < putIndex - 1;i++)
+			p[i] = p[i + 1];
+		p[--putIndex] = 0;
+		return true;
+	}
+	else
+		return false;
+}
+
+
+
+int main()
+{
+	MyPipe a(5);
+	a.put(10); a.put(20);
+
+	MyPipe b = a;
+	b.put(30);
+	cout << "파이프 a에 저장된 개수: " << a.getSize() << endl;
+	cout << "파이프 b에 저장된 개수: " << b.getSize() << endl;
+
+	int n;
+	a.get(n);
+	cout << "파이프 a에서 빼온 값: " << n << endl;
+	b.get(n);
+	cout << "파이프 b에서 뺴온 값: " << n << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<13번>
+
+(1)
+#include <iostream>
+using namespace std;
+
+class Collector {
+	int* p;
+	int size = 0;
+public:
+	Collector(int size, int values[]) { this->size = size; p = new int[size]; for (int i = 0;i < size;i++) p[i] = values[i]; }
+	void show();
+	int getSize() { return size; }
+	int get(int index) { return p[index]; }
+};
+
+void Collector::show()
+{
+	cout << "데이터 수 " << size << ": ";
+	for (int i = 0;i < size;i++)
+		cout << p[i] << ' ';
+	cout << endl;
+}
+
+
+
+double calcAvg(Collector col)
+{
+	double sum = 0;
+	for (int i = 0;i < col.getSize();i++)
+		sum += col.get(i);
+	return sum / col.getSize();
+}
+
+
+
+
+int main()
+{
+	int temp[] = { 69,70,71,72,74 };
+	Collector weight(4, temp);
+	double avg = calcAvg(weight);
+	weight.show();
+	cout << "평균은 " << avg << endl;
+
+	return 0;
+}
+
+(2)
+#include <iostream>
+using namespace std;
+
+class Collector {
+	int* p;
+	int size = 0;
+public:
+	Collector(int size, int values[]) { this->size = size; p = new int[size]; for (int i = 0;i < size;i++) p[i] = values[i]; }
+	~Collector() { delete[]p; }
+	void show();
+	int getSize() { return size; }
+	int get(int index) { return p[index]; }
+};
+
+void Collector::show()
+{
+	cout << "데이터 수 " << size << ": ";
+	for (int i = 0;i < size;i++)
+		cout << p[i] << ' ';
+	cout << endl;
+}
+
+
+
+double calcAvg(Collector col)
+{
+	double sum = 0;
+	for (int i = 0;i < col.getSize();i++)
+		sum += col.get(i);
+	return sum / col.getSize();
+}
+
+
+
+
+int main()
+{
+	int temp[] = { 69,70,71,72,74 };
+	Collector weight(4, temp);
+	double avg = calcAvg(weight);
+	weight.show();
+	cout << "평균은 " << avg << endl;
+
+	return 0;
+}
+
+(3)
+#include <iostream>
+using namespace std;
+
+class Collector {
+	int* p;
+	int size = 0;
+public:
+	Collector(int size, int values[]) { this->size = size; p = new int[size]; for (int i = 0;i < size;i++) p[i] = values[i]; }
+	Collector(const Collector& src) { this->size = src.size; this->p = new int[size]; for (int i = 0;i < size;i++) this->p[i] = src.p[i]; }
+	~Collector() { delete[]p; }
+	void show();
+	int getSize() { return size; }
+	int get(int index) { return p[index]; }
+};
+
+void Collector::show()
+{
+	cout << "데이터 수 " << size << ": ";
+	for (int i = 0;i < size;i++)
+		cout << p[i] << ' ';
+	cout << endl;
+}
+
+
+
+double calcAvg(Collector col)
+{
+	double sum = 0;
+	for (int i = 0;i < col.getSize();i++)
+		sum += col.get(i);
+	return sum / col.getSize();
+}
+
+
+
+
+int main()
+{
+	int temp[] = { 69,70,71,72,74 };
+	Collector weight(4, temp);
+	double avg = calcAvg(weight);
+	weight.show();
+	cout << "평균은 " << avg << endl;
+
+	return 0;
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<14번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Contest {
+	string* teams;
+	int* scores;
+	int size;
+public:
+	Contest(int size) { this->size = size; teams = new string[size]; scores = new int[size]; }
+	Contest(Contest& src) { this->size = src.size; this->teams = new string[size]; this->scores = new int[size]; for (int i = 0;i < size;i++) { this->teams[i] = src.teams[i]; this->scores[i] = src.scores[i]; } }
+	~Contest() { delete[]teams; delete[]scores; }
+	void read();
+	int getSize() { return size;}
+	int getScore(int index) { return scores[index];}
+	string getTeam(int index) { return teams[index]; }
+};
+
+void Contest::read()
+{
+	cout << "6개 입력>> ";
+	for (int i = 0;i < size;i++)
+		cin >> teams[i] >> scores[i];
+}
+
+string decideGoldAward(Contest codingTest)
+{
+	int max = codingTest.getScore(0);
+	string team = codingTest.getTeam(0);
+	for (int i = 1;i < codingTest.getSize();i++)
+	{
+		if (max < codingTest.getScore(i))
+		{
+			max = codingTest.getScore(i);
+			team = codingTest.getTeam(i);
+		}
+	}
+	return team;
+}
+
+
+
+int main()
+{
+	Contest codingtest(6);
+	codingtest.read();
+	string team = decideGoldAward(codingtest);
+	cout << "금상은 " << team << " 팀입니다." << endl;
+
+	return 0;
+}

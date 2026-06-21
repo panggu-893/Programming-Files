@@ -1,0 +1,43 @@
+// 0이나 음수로 나누는 오류를 탐지하고 예외 처리하는 코드
+
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	int sum, count, average;
+	while (true)
+	{
+		cout << "합 입력(종료는 -1)>> ";
+		cin >> sum;
+		if (sum == -1)
+			break;
+		cout << "인원 수 입력>> ";
+		cin >> count;
+		try {
+			if (count == 0)
+				throw 0.0;
+			else if (count < 0)
+				throw - 1;
+			else
+				average = sum / count;
+			
+		}
+		catch (double n)
+		{
+			cout << "0으로 나눌 수 없습니다." << endl;
+			average = 0;
+			cout << endl;
+			continue;
+		}
+		catch (int n)
+		{
+			cout << "음수로 나눌 수 없습니다." << endl;
+			average = 0;
+			cout << endl;
+			continue;
+		}
+		cout << "평균은 " << average << endl;
+	}
+	cout << "프로그램을 종료합니다." << endl;
+}

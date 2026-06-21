@@ -1,0 +1,49 @@
+//예외 처리를 가진 스택 클래스 만들기
+
+#include <iostream>
+using namespace std;
+
+class MyStack {
+	int data[100] = { 0 };
+	int tos;
+public:
+	MyStack() { tos = -1; }
+	void push(int n)throw(char*);
+	int pop()throw(char*);
+};
+
+void MyStack::push(int n)
+{
+	if (tos >= 99)
+		throw "stack has no space";
+	else
+		data[++tos] = n;
+}
+
+int MyStack::pop()
+{
+	if (tos <= -1)
+		throw "stack is empty";
+	else
+	{
+		int n = data[tos--];
+		return n;
+	}
+}
+
+int main()
+{
+	MyStack intStack;
+	try 
+	{
+		intStack.push(100);
+		intStack.push(200);
+		cout << intStack.pop() << endl;
+		cout << intStack.pop() << endl;
+		cout << intStack.pop() << endl;
+	}
+	catch (const char* s)
+	{
+		cout << "예외 발생: " << s << endl;
+	}
+}

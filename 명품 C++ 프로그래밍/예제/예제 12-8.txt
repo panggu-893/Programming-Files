@@ -1,0 +1,30 @@
+//바이너리 I/O로 read()를 이용하여 블록 단위로 텍스트 파일 읽기
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main()
+{
+	const char* file = "c:\\windows\\system.ini";
+	
+	ifstream fin;
+	fin.open(file,ios::binary);
+	if (!fin)
+	{
+		cout << "Failed to open file..." << endl;
+		return 0;
+	}
+	
+	int count = 0;
+	char buf[1024];
+	while (!fin.eof())
+	{
+		fin.read(buf, 32);
+		int n = fin.gcount();
+		cout.write(buf, n);
+		count += n;
+	}
+	cout << "읽은 바이트의 개수는 " << count << endl;								//binary로 읽을 경우 219, text로 읽을 경우 206   -> /r/n을 text는 1 바이트로, binary는 2바이트로 인식
+	fin.close();
+}

@@ -1,0 +1,37 @@
+//read()/write()로 이미지 파일 복사
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+
+int main()
+{
+	const char* srcFile = "C:\\Users\\SJH\\Downloads\\스크린샷 2026-03-02 195341.png";
+	const char* dstFile = "C:\\Users\\SJH\\Downloads\\copy.jpg";
+
+	ifstream fin;
+	ofstream fout;
+
+	fin.open(srcFile,ios::binary);
+	if (!fin)
+	{
+		cout << "Failed to open src" << endl;
+		return 0;
+	}
+	fout.open(dstFile,ios::binary);
+	if (!fout)
+	{
+		cout << "Failed to open dst" << endl;
+		return 0;
+	}
+
+	char buf[1024];
+	while (fin.eof())
+	{
+		fin.read(buf, 1024);
+		int n = fin.gcount();
+		fout.write(buf, n);
+	}
+	fin.close();
+	fout.close();
+}

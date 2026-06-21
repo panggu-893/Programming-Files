@@ -1,0 +1,390 @@
+<4번> 
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+string erase(string sent, string rplc_this=" ", string to_this="")
+{
+	while (1)
+	{
+		int index = sent.find(rplc_this);
+		if (index < 0)
+			break;
+		sent.replace(index, rplc_this.length(), to_this);
+	}
+
+	return sent;
+}
+
+int main()
+{
+	string a = erase("Hello      world,    Yaho");
+	cout << "모든 빈 칸 지운 결과\t" << a << endl;
+	string b = erase("Hello      world,    Yaho", "ll");
+	cout << "모든 ll을 지운 결과\t" << b << endl;
+	string c = erase("Hello      world,    Yaho", "o", "77");
+	cout << "모든 o를 77로 바꾼 결과\t" << c << endl;
+
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<5번>
+
+#include <iostream>
+using namespace std;
+
+class Vector {
+	int* mem;
+	int size;
+public:
+	Vector(int size = 5, int initialize = 0);
+	~Vector() { delete[]mem; }
+	void show(int index = 0);
+};
+
+Vector::Vector(int size , int initialize)
+{
+	this->size = size;
+	mem = new int[this->size];
+	for (int i = 0;i < this->size;i++)
+		mem[i] = initialize;
+}
+
+void Vector::show(int index)
+{
+	if (index != 0)
+	{
+		for (int i = 0;i < index;i++)
+			cout << mem[i] << ' ';
+		cout << endl;
+	}
+	else
+	{
+		for (int i = 0;i < size;i++)
+			cout << mem[i] << ' ';
+		cout << endl;
+	}
+}
+
+int main()
+{
+	Vector x;
+	Vector y(10, 8);
+	x.show();
+	y.show();
+	y.show(3);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<6번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class GameBoard {
+	int white, blue;
+public:
+	GameBoard() { white = blue = 0; }
+	void increase(int score = 10, string team="");
+	void show(string team = "");
+};
+
+void GameBoard::increase(int score, string team)
+{
+	if (team == "")
+	{
+		white += score;
+		blue += score;
+	}
+	else if (team == "청군")
+		blue += score;
+	else if (team == "백군")
+		white += score;
+}
+
+void GameBoard::show(string team)
+{
+	if (team == "")
+		cout << "청군: " << blue << ", 백군: " << white << endl;
+	else if (team == "청군")
+		cout << "청군: " << blue << endl;
+	else if (team == "백군")
+		cout << "백군: " << white << endl;
+}
+
+int main()
+{
+	GameBoard board;
+	board.increase();
+	board.increase(20);
+	board.increase(30, "청군");
+	board.increase(40, "백군");
+	board.show();
+	board.show("청군");
+
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<7번>
+
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
+class Random {
+	Random() {};
+public:
+	static void seed() { srand((unsigned)time(NULL)); }
+	static int nextInt(int min = 0, int max = 32767);
+	static char nextAlphabet();
+	static double nextDouble();
+};
+
+int Random::nextInt(int min, int max)
+{
+	return rand() % (max - min + 1) + min;
+}
+
+char Random::nextAlphabet()
+{
+	int ls = rand() % 2;
+	switch (ls)
+	{
+	case 0:
+		return rand() % (90 - 65 + 1) + 65;
+	case 1:
+		return rand() % (122 - 97 + 1) + 97;
+	}
+}
+
+double Random::nextDouble()
+{
+	return (double)rand()/RAND_MAX;
+}
+
+int main()
+{
+	cout << "1에서 100까지 랜덤한 정수 10개를 출력합니다." << endl;
+	for (int i = 0;i < 10;i++)
+	{
+		int n = Random::nextInt(1, 100);
+		cout << n << ' ';
+	}
+	cout << "\n알파벳을 랜덤하게 10개 출력합니다." << endl;
+	for (int i = 0;i < 10;i++)
+	{
+		char c = Random::nextAlphabet();
+		cout << c << ' ';
+	}
+	cout << "\n랜덤한 실수를 10개 출력합니다." << endl;
+	for (int i = 0;i < 10;i++)
+	{
+		if (i == 5)
+			cout << endl;
+		double d = Random::nextDouble();
+		cout << d << ' ';
+	}
+
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<8번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class WordUtility {
+	WordUtility() {};
+public:
+	static int wordCount(string sent);
+	static string getWord(string sent, int word);
+};
+
+int WordUtility::wordCount(string sent)
+{
+	int index = 0, count = 1;
+	while (1)
+	{
+		index = sent.find(" ");
+		if (index == string::npos)
+			break;
+		sent.erase(index, 1);
+		count++;
+	}
+
+	return count;
+}
+
+string WordUtility::getWord(string sent, int number)
+{
+	string word;
+	int index = 0, count = 1;
+	while (1)
+	{
+		index = sent.find(" ");
+		if (index == string::npos && count<number-1)
+			return "";
+		if (count == number-1)
+		{
+			int eIndex = sent.find(" ", index + 1);
+			word = sent.substr(index, eIndex - index);
+			return word;
+		}
+		sent.erase(index, 1);
+		count++;
+	}
+}
+
+int main()
+{
+	int n = WordUtility::wordCount("I love C++");
+	cout << "단어의 개수는 " << n << endl;
+	string word = WordUtility::getWord("I love C++", 3);
+	if (word == "") cout << "3번째 단어는 없습니다." << endl;
+	else cout << "3번째 단어는 " << word << endl;
+
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<9번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Trace{
+public:
+	static int index;
+	static string debug_log[1000];
+	static void put(string tag, string debug);
+	static void print(string tag="");
+};
+int Trace::index = 0;
+string Trace::debug_log[1000] = {};
+
+void Trace::put(string tag, string debug)
+{
+	if (tag == "sumTo()")
+	{
+		debug_log[index] = tag + ":\t" + debug;
+		index++;
+		return;
+	}
+
+	debug_log[index] = tag + ": " + debug;
+	index++;
+	return;
+}
+
+void Trace::print(string tag)
+{
+	if (tag == "")
+	{
+		cout << "모든 Trace 정보 출력" << endl;
+		for (int i = 0;i < index;i++)
+			cout << debug_log[i] << endl;
+	}
+	else
+	{
+		cout << tag << "태그의 Trace 정보 출력" << endl;
+		for(int i =0;i<index;i++)
+		{
+			if (debug_log[i].find(tag) != string::npos)
+				cout << debug_log[i] << endl;
+		}
+	}
+}
+
+
+
+int sumTo(int start, int end)
+{
+	Trace::put("sumTo()", "매개변수 start=" + to_string(start));
+	Trace::put("sumTo()", "매개변수 end =" + to_string(end));
+	int sum = 0;
+	for (int i = start;i <= end;i++)
+	{
+		sum += i;
+		Trace::put("sumTo()", "sum =" + to_string(sum));
+	}
+
+	return sum;
+}
+
+int main()
+{
+	Trace::put("main()", "프로그램 시작");
+	int n = sumTo(1, 5);
+	Trace::put("main()", "n=" + to_string(n));
+	Trace::print("main()");
+	cout << endl;
+	Trace::print();
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+<10번>
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Board {
+public:
+	static int index;
+	static string board[10];
+	static void add(string text);
+	static void print();
+};
+int Board::index = 0;
+string Board::board[10] = {};
+
+void Board::add(string text)
+{
+	board[index] = text;
+	index++;
+}
+
+void Board::print()
+{
+	cout << "************** 게시판입니다.(" << index + 1 << ")******************" << endl;
+	for (int i = 0;i < index;i++)
+		cout << i + 1 << ": " << board[i] << endl;
+	cout << "*********************************************************************" << endl;
+}
+
+
+
+int main()
+{
+	while (true)
+	{
+		int menu;
+		string text;
+		cout << "1:게시글 입력, 2: 게시글 보기>>";
+		cin >> menu;
+		cin.ignore(1);
+		switch (menu)
+		{
+		case 1:
+			getline(cin, text);
+			Board::add(text);
+			break;
+		case 2:
+			Board::print();
+		}
+	}
+}

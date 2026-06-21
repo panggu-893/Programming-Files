@@ -1,0 +1,30 @@
+//예외 처리를 포함한 지수 승 계산
+
+#include <iostream>
+using namespace std;
+
+int getExp(int base, int exp)
+{
+	if (base <= 0 || exp <= 0)
+		throw "음수 사용 불가";
+	int value = 1;
+	for (int i = 1;i <= exp;i++)
+		value *= base;
+	return value;
+}
+
+int main()
+{
+	try {
+		int n = getExp(2, 4);
+		cout << "2의 4승은 " << n << endl;
+
+		int p = getExp(2, -3);
+		cout << "2의 -3승은 " << p << endl;
+	}
+	catch (const char* neg)
+	{
+		cout << "음수의 지수 계산 불가능" << endl;
+		return 0;
+	}
+}

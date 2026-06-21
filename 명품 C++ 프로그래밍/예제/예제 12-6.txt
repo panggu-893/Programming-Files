@@ -1,0 +1,48 @@
+//getline(ifstream&, string&)으로 words.txt 파일을 읽고 단어 검색
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+using namespace std;
+
+int main()
+{
+	const char* file = "C:\\Users\\SJH\\Desktop\\학교\\2학년 1학기\\프로그래밍 언어\\실습\\Lab12\\words.txt";
+	ifstream fin;
+	fin.open(file);
+	if (!fin)
+	{
+		cout << "Failed to open file successfully..." << endl;
+		return 0;
+	}
+	
+	string word;
+	vector<string> wordList;
+	while (getline(fin, word))
+	{
+		if (fin.eof())
+			break;
+		wordList.push_back(word);
+	}
+	cout << "단어장 불러오기 완료" << endl;
+
+	while (true)
+	{
+		string find;
+		cout << "단어 입력>> ";
+		getline(cin, find);
+		
+		if (find == "exit")
+			break;
+
+		for (int i = 0;i < wordList.size();i++)
+		{
+			if (wordList[i].find(find) != string::npos)
+				cout << wordList[i] << endl;
+			else
+				continue;
+		}
+	}
+	cout << "프로그램을 종료합니다..." << endl;
+}
